@@ -1,25 +1,249 @@
-<body style="background-color: #0d0d0d; color: #39ff14; font-family: 'Courier New', Courier, monospace; padding: 20px;">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Mission du Fermier - Géocache Collaborative</title>
+    <style>
+        /* Importation des polices pour un style "BD / Ferme" */
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&display=swap');
 
-    <header style="border-bottom: 2px solid #39ff14; padding-bottom: 10px;">
-        <h1 style="font-size: 1.2em;">SYSTEME_TRAQUE_RENARD.exe</h1>
-        <p style="font-size: 0.8em;">IDENTIFIANT : AGENT_COLLECTIF</p>
-    </header>
+        body {
+            background-color: #e0f7fa;
+            background-image: linear-gradient(180deg, #87CEEB 0%, #f0f4c3 100%);
+            font-family: 'Patrick Hand', cursive;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #2e7d32;
+            overflow-x: hidden;
+        }
 
-    <main style="margin-top: 30px;">
-        <div id="status" style="background: #1a1a1a; padding: 10px; border-radius: 5px;">
-            <p>> RÉSEAU : CONNECTÉ</p>
-            <p>> MISSION : RETROUVER LE BUTIN DU HANGAR</p>
-        </div>
+        .header {
+            background-color: #ffca28;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #f9a825;
+        }
 
-        <section style="margin-top: 40px; text-align: center;">
-            <p>ENTRER LE CODE TROUVÉ SUR LE TERRAIN :</p>
-            <input type="text" style="background: #000; border: 1px solid #39ff14; color: #39ff14; padding: 10px; width: 80%;">
-            <button style="background: #39ff14; color: #000; border: none; padding: 10px 20px; margin-top: 10px; font-weight: bold;">ANALYSER</button>
-        </section>
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #ef6c00;
+            margin: 0;
+            text-shadow: 2px 2px 0px #fff;
+            font-size: 1.8rem;
+        }
 
-        <section style="margin-top: 50px;">
-            <p style="font-style: italic; font-size: 0.8em; color: #888;">"Le renard ne laisse pas de traces, il laisse des énigmes." - Le Vieux Fermier</p>
-        </section>
-    </main>
+        .container {
+            max-width: 500px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.9);
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 25px;
+            border: 4px dashed #8bc34a;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .farm-icon {
+            font-size: 50px;
+            margin: 10px 0;
+        }
+
+        .status-box {
+            background: #fff9c4;
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #f57f17;
+            border: 2px solid #fbc02d;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            border: 3px solid #ffccbc;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-family: 'Patrick Hand', cursive;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            font-family: 'Fredoka One', cursive;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 5px 0px #2e7d32;
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0px #2e7d32;
+        }
+
+        .animal-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .animal-btn {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #ccc;
+            margin: 5px;
+            transition: transform 0.1s;
+        }
+
+        .animal-btn:active {
+            transform: scale(0.9);
+            box-shadow: 0 1px 0 #ccc;
+        }
+
+        #message-area {
+            margin-top: 20px;
+            min-height: 60px;
+            font-weight: bold;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #558b2f;
+            text-align: center;
+        }
+
+        .success-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #ef6c00;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🌾 LA FERME DU BONHEUR 🚜</h1>
+</div>
+
+<div class="container">
+    <div class="farm-icon">🐥</div>
+    
+    <div class="status-box" id="status">
+        Bonjour les explorateurs ! Trouvez le code pour m'aider à coincer le renard !
+    </div>
+
+    <p>Entrez le code secret trouvé sur le terrain :</p>
+    <input type="text" id="code-input" placeholder="MOT MAGIQUE...">
+    <br>
+    <button onclick="checkCode()">VÉRIFIER !</button>
+
+    <hr style="margin: 30px 0; border: 1px dashed #ccc;">
+
+    <p>🔊 Entraînez-vous pour le cri du clan :</p>
+    <div class="animal-buttons">
+        <div class="animal-btn" onclick="playSound('🐔')">🐔</div>
+        <div class="animal-btn" onclick="playSound('🐷')">🐷</div>
+        <div class="animal-btn" onclick="playSound('🐮')">🐮</div>
+        <div class="animal-btn" onclick="playSound('🐑')">🐑</div>
+    </div>
+
+    <div id="message-area"></div>
+</div>
+
+<div class="footer">
+    🌳 Géocache Collaborative - Ne restez pas seuls dans les bois !
+</div>
+
+<script>
+    // Gère les effets sonores (visuels et vibrations)
+    function playSound(animal) {
+        const msg = document.getElementById('message-area');
+        let cry = "";
+        if(animal === '🐔') cry = "COT COT COT !";
+        if(animal === '🐷') cry = "GROIN GROIN !";
+        if(animal === '🐮') cry = "MEUUUUUH !";
+        if(animal === '🐑') cry = "BÊÊÊÊÊÊ !";
+        
+        msg.innerHTML = `<span style="color:#e91e63;">${cry}</span>`;
+        
+        // Fait vibrer le téléphone si disponible
+        if (navigator.vibrate) {
+            navigator.vibrate(80);
+        }
+    }
+
+    // Gère la vérification du code secret
+    function checkCode() {
+        const input = document.getElementById('code-input').value.toUpperCase().trim();
+        const msg = document.getElementById('message-area');
+        const status = document.getElementById('status');
+        const container = document.querySelector('.container');
+
+        // Le code par défaut est POULAILLER
+        if(input === "POULAILLER") {
+            status.innerHTML = "🌟 INCROYABLE ! Vous avez trouvé !";
+            status.style.background = "#c8e6c9";
+            status.style.color = "#2e7d32";
+            status.style.border = "2px solid #4caf50";
+            
+            msg.innerHTML = `<div>
+                <p>Le renard s'est enfui vers la tanière !</p>
+                <a href="#" class="success-link">VOIR LA CARTE FINALE 📍</a>
+            </div>`;
+            
+            alert("BRAVO ! Mission accomplie !");
+        } else {
+            msg.innerHTML = "<span style='color:#d32f2f;'>Ce n'est pas ça... Réessayez ! 🧐</span>";
+            
+            // Animation de secousse pour l'erreur
+            container.style.transform = "translateX(10px)";
+            setTimeout(() => { container.style.transform = "translateX(-10px)"; }, 100);
+            setTimeout(() => { container.style.transform = "translateX(10px)"; }, 200);
+            setTimeout(() => { container.style.transform = "translateX(0)"; }, 300);
+        }
+    }
+</script>
 
 </body>
+</html>
